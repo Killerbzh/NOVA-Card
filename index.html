@@ -117,7 +117,7 @@ body{display:flex;flex-direction:column}
 .sb-panel{background:var(--surf);border:1px solid var(--bord);border-radius:13px;padding:10px;display:flex;flex-direction:column;overflow:hidden}
 .sb-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--bord);margin-bottom:7px;flex-shrink:0}
 #sb-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
-.prow{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;border:1px solid transparent;transition:.2s}
+.prow{display:flex;align-items:center;gap:77px;padding:6px 8px;border-radius:8px;border:1px solid transparent;transition:.2s}
 .prow.turn{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.35)}
 .pav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700}
 .pinfo{flex:1;min-width:0}
@@ -364,7 +364,7 @@ body{display:flex;flex-direction:column}
         </div>
         <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">Joueurs connectés</div>
         <div id="waiting-list"></div>
-        <button class="btn btn-p" id="btn-start" style="margin-top:12px;display:none" onclick="startOnline()">▶ Démarrer la partie</button>
+        <button class="btn btn-p" id="btn-start" style="margin-top:12px;display:none" disabled onclick="startOnline()">▶ Démarrer la partie</button>
         <div id="wait-host" style="display:none;margin-top:12px;text-align:center;font-size:12px;color:var(--muted)">⏳ En attente que l'hôte démarre...</div>
       </div>
     </div>
@@ -378,7 +378,7 @@ body{display:flex;flex-direction:column}
       3. Ils ouvrent ce fichier et saisissent le code<br>
       4. Quand tout le monde est là, l'hôte démarre<br>
       <br>
-      <span style="color:#fcd34d">⚠️ Nécessite une connexion internet (Firebase)</span>
+      <span style="color:#fcd34d">⚠️ Connecté à ta base Firebase Realtime</span>
     </p>
   </div>
 </div>
@@ -493,7 +493,7 @@ body{display:flex;flex-direction:column}
 
 <script>
 // ═══════════════════════════════════════════════════════
-//  FIREBASE CONFIG (Utilise la base de test-4c1a5)
+//  FIREBASE CONFIG (URL de ta base active)
 // ═══════════════════════════════════════════════════════
 const FB = "https://base-de-test-4c1a5-default-rtdb.firebaseio.com";
 
@@ -564,10 +564,10 @@ function fbListen(path, cb){
   if(fbES){ fbES.close(); fbES=null; }
   const es = new EventSource(`${FB}/${path}.json`);
   es.addEventListener('put', e => {
-    try { const d=JSON.parse(e.data); if(d && d.data !== null) cb(d.data, d.path); } catch(err){}
+    try { const d=JSON.parse(e.data); cb(d.data, d.path); } catch(err){}
   });
   es.addEventListener('patch', e => {
-    try { const d=JSON.parse(e.data); if(d && d.data !== null) cb(d.data, d.path); } catch(err){}
+    try { const d=JSON.parse(e.data); cb(d.data, d.path); } catch(err){}
   });
   fbES = es;
   return es;
@@ -657,29 +657,47 @@ function showRoomLobby(code, host){
 }
 
 function listenRoom(code){
-  fbListen(`rooms/${code}`, (data, path) => {
-    if(data.players){
-      const pl = Object.entries(data.players);
-      const wl = document.getElementById('waiting-list');
-      wl.innerHTML = '';
-      pl.forEach(([id, p]) => {
-        const d = document.createElement('div');
-        d.className = 'wslot';
-        d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
-        wl.appendChild(d);
-      });
-      if(isHost){
-        const n = pl.length;
-        document.getElementById('btn-start').textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
+  fbListen(`rooms/${code}`, async (data, path) => {
+    try {
+      const room = await fbGet(`rooms/${code}`);
+      if (!room) return;
+
+      if(room.players){
+        const pl = Object.entries(room.players);
+        const wl = document.getElementById('waiting-list');
+        if (wl) {
+          wl.innerHTML = '';
+          pl.forEach(([id, p]) => {
+            const d = document.createElement('div');
+            d.className = 'wslot';
+            d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
+            wl.appendChild(d);
+          });
+        }
+        
+        if(isHost){
+          const n = pl.length;
+          const btnStart = document.getElementById('btn-start');
+          if (btnStart) {
+            btnStart.textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
+            btnStart.disabled = (n < 2);
+            if (n >= 2) {
+              btnStart.style.display = 'block';
+            }
+          }
+        }
       }
-    }
-    if(data.status === 'playing' && data.gameState && data.gameState.version > lastSeenVersion){
-      lastSeenVersion = data.gameState.version || 0;
-      if(!G.active){
-        startFromState(data.gameState, data.players, data.config || CFG);
-      } else {
-        syncState(data.gameState);
+
+      if(room.status === 'playing' && room.gameState && room.gameState.version > lastSeenVersion){
+        lastSeenVersion = room.gameState.version || 0;
+        if(!G.active){
+          startFromState(room.gameState, room.players, room.config || CFG);
+        } else {
+          syncState(room.gameState);
+        }
       }
+    } catch(err) {
+      console.error("Erreur sync:", err);
     }
   });
 }
@@ -689,7 +707,7 @@ async function startOnline(){
   const room = await fbGet(`rooms/${myRoomCode}`);
   const players = room.players || {};
   const playerList = Object.entries(players).map(([id,p])=>({id, name:p.name}));
-  if(playerList.length < 1){ toast('Besoin d\'au moins 2 joueurs !','t-w'); return; }
+  if(playerList.length < 2){ toast('Besoin d\'au moins 2 joueurs !','t-w'); return; }
 
   readCFG();
   const state = buildOnlineState(playerList);
@@ -999,6 +1017,7 @@ function playMyCard(cardId){
   if(onlineMode) pushState();
 }
 
+// Modifié pour que le bouton "Passer" s'affiche correctement
 function playerDraw(){
   if(G.turnIdx!==myIdx()||!G.active) return;
   const me=myPlayer();
@@ -1193,7 +1212,7 @@ function renderMyHand(){
     const target=divs.find(d=>parseInt(d.style.zIndex)===me.hand.length-1);
     if(target&&playable){
       target.classList.add('playable');
-      target.addEventListener('click',()=>playMyCard(card.id,true));
+      target.addEventListener('click',()=>playMyCard(card.id));
     }
     const pass=document.createElement('button');
     pass.textContent='Passer ›';
