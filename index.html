@@ -95,7 +95,7 @@ body{display:flex;flex-direction:column}
 .btn-o{background:transparent;border:1px solid var(--bord2);color:var(--muted2)}
 .btn-o:hover{border-color:var(--pur);color:var(--txt)}
 .btn-p:disabled,.btn-o:disabled{opacity:.5;cursor:not-allowed}
-.orsep{text-align:center;color:var(--muted);font-size:11px;position:relative;margin:4px 0}
+.orsep text-align:center;color:var(--muted);font-size:11px;position:relative;margin:4px 0}
 .orsep::before,.orsep::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--bord)}
 .orsep::before{left:0}.orsep::after{right:0}
 
@@ -364,7 +364,7 @@ body{display:flex;flex-direction:column}
         </div>
         <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">Joueurs connectés</div>
         <div id="waiting-list"></div>
-        <button class="btn btn-p" id="btn-start" style="margin-top:12px;display:none" disabled onclick="startOnline()">▶ Démarrer la partie</button>
+        <button class="btn btn-p" id="btn-start" style="margin-top:12px;display:none" onclick="startOnline()">▶ Démarrer la partie</button>
         <div id="wait-host" style="display:none;margin-top:12px;text-align:center;font-size:12px;color:var(--muted)">⏳ En attente que l'hôte démarre...</div>
       </div>
     </div>
@@ -657,47 +657,62 @@ function showRoomLobby(code, host){
 }
 
 function listenRoom(code){
-  fbListen(`rooms/${code}`, async (data, path) => {
-    try {
-      const room = await fbGet(`rooms/${code}`);
-      if (!room) return;
+  let localRoom = { players: {}, status: 'waiting', gameState: null };
 
-      if(room.players){
-        const pl = Object.entries(room.players);
-        const wl = document.getElementById('waiting-list');
-        if (wl) {
-          wl.innerHTML = '';
-          pl.forEach(([id, p]) => {
-            const d = document.createElement('div');
-            d.className = 'wslot';
-            d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
-            wl.appendChild(d);
-          });
-        }
-        
-        if(isHost){
-          const n = pl.length;
-          const btnStart = document.getElementById('btn-start');
-          if (btnStart) {
-            btnStart.textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
-            btnStart.disabled = (n < 2);
-            if (n >= 2) {
-              btnStart.style.display = 'block';
-            }
-          }
+  fbListen(`rooms/${code}`, (data, path) => {
+    if (!data) return;
+
+    if (path === '/') {
+      localRoom = { ...localRoom, ...data };
+    } else if (path.startsWith('/players')) {
+      if (!localRoom.players) localRoom.players = {};
+      const subPath = path.replace('/players', '');
+      if (subPath === '') {
+        localRoom.players = { ...localRoom.players, ...data };
+      } else {
+        const pId = subPath.replace('/', '');
+        localRoom.players[pId] = { ...localRoom.players[pId], ...data };
+      }
+    } else if (path.startsWith('/gameState')) {
+      if (!localRoom.gameState) localRoom.gameState = {};
+      const subPath = path.replace('/gameState', '');
+      if (subPath === '') localRoom.gameState = { ...localRoom.gameState, ...data };
+      else localRoom.gameState[subPath.replace('/', '')] = data;
+    } else {
+      const key = path.replace('/', '');
+      localRoom[key] = data;
+    }
+
+    if (localRoom.players) {
+      const pl = Object.entries(localRoom.players);
+      const wl = document.getElementById('waiting-list');
+      if (wl) {
+        wl.innerHTML = '';
+        pl.forEach(([id, p]) => {
+          if (!p) return;
+          const d = document.createElement('div');
+          d.className = 'wslot';
+          d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
+          wl.appendChild(d);
+        });
+      }
+      
+      if (isHost) {
+        const n = pl.length;
+        const btnStart = document.getElementById('btn-start');
+        if (btnStart) {
+          btnStart.textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
         }
       }
+    }
 
-      if(room.status === 'playing' && room.gameState && room.gameState.version > lastSeenVersion){
-        lastSeenVersion = room.gameState.version || 0;
-        if(!G.active){
-          startFromState(room.gameState, room.players, room.config || CFG);
-        } else {
-          syncState(room.gameState);
-        }
+    if (localRoom.status === 'playing' && localRoom.gameState && localRoom.gameState.version > lastSeenVersion) {
+      lastSeenVersion = localRoom.gameState.version || 0;
+      if (!G.active) {
+        startFromState(localRoom.gameState, localRoom.players, localRoom.config || CFG);
+      } else {
+        syncState(localRoom.gameState);
       }
-    } catch(err) {
-      console.error("Erreur sync:", err);
     }
   });
 }
@@ -707,7 +722,7 @@ async function startOnline(){
   const room = await fbGet(`rooms/${myRoomCode}`);
   const players = room.players || {};
   const playerList = Object.entries(players).map(([id,p])=>({id, name:p.name}));
-  if(playerList.length < 2){ toast('Besoin d\'au moins 2 joueurs !','t-w'); return; }
+  if(playerList.length < 1){ toast('Besoin d\'au moins 1 joueur !','t-w'); return; }
 
   readCFG();
   const state = buildOnlineState(playerList);
@@ -1017,7 +1032,6 @@ function playMyCard(cardId){
   if(onlineMode) pushState();
 }
 
-// Modifié pour que le bouton "Passer" s'affiche correctement
 function playerDraw(){
   if(G.turnIdx!==myIdx()||!G.active) return;
   const me=myPlayer();
@@ -1259,16 +1273,6 @@ function renderInds(){
     st.style.display='block';
     document.getElementById('stack-n').textContent=G.pendingDraw;
   } else { st.style.display='none'; }
-}
-
-function updateNovaBtn(){
-  const me=myPlayer();
-  const btn=document.getElementById('nova-btn');
-  if(me&&me.hand.length===1&&!G.saidNova&&G.turnIdx===myIdx()){
-    btn.classList.add('active'); btn.disabled=false;
-  } else {
-    btn.classList.remove('active'); btn.disabled=true;
-  }
 }
 
 // ═══════════════════════════════════════════════════════
