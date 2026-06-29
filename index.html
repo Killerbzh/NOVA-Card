@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>NOVA Cards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -18,13 +18,9 @@
 }
 html,body{height:100%;overflow:hidden;background:var(--dark);color:var(--txt);font-family:'Poppins',sans-serif}
 body{display:flex;flex-direction:column}
-
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:4px}
-
-/* ══ HEADER ══ */
 #hdr{
   background:var(--surf);border-bottom:1px solid var(--bord);
   height:50px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;
@@ -39,17 +35,14 @@ body{display:flex;flex-direction:column}
 .room-pill{display:none;align-items:center;gap:6px;background:var(--surf2);border:1px solid var(--bord2);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;cursor:pointer;color:var(--muted2)}
 .room-pill.on{display:flex}
 .room-pill span{color:var(--txt);letter-spacing:.1em}
-.pdot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:blink 2s infinite}
+.pdot{width:7px;height:7px;border-radius:50%;background:#ef4444}
+.pdot.online{background:#22c55e;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .hdr-name{font-size:12px;font-weight:700;color:var(--muted2)}
 #hdr-meta{display:none;align-items:center;gap:7px}
-
-/* ══ SCREENS ══ */
 #screens{flex:1;overflow:hidden;position:relative}
 .screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .3s,transform .3s;pointer-events:none;opacity:0;transform:translateY(10px)}
 .screen.active{pointer-events:all;opacity:1;transform:translateY(0)}
-
-/* ══ LOBBY ══ */
 #s-lobby{background:radial-gradient(ellipse at 50% 0%,#180d40 0%,var(--dark) 65%);overflow-y:auto;align-items:flex-start;padding:16px}
 .lw{width:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:12px;padding-bottom:24px}
 .hero{text-align:center;padding:20px 0 6px}
@@ -57,7 +50,6 @@ body{display:flex;flex-direction:column}
 .hero h1{font-size:24px;font-weight:900;letter-spacing:-.5px}
 .hero h1 em{color:var(--pur);font-style:normal}
 .hero p{color:var(--muted2);font-size:12px;margin-top:4px}
-
 .box{background:var(--surf);border:1px solid var(--bord);border-radius:16px;padding:18px}
 .box h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
@@ -65,8 +57,6 @@ body{display:flex;flex-direction:column}
 .fl label{font-size:11px;font-weight:700;color:var(--muted2)}
 .fi{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;padding:10px 13px;color:var(--txt);font-size:14px;font-family:inherit;outline:none;transition:.2s;width:100%}
 .fi:focus{border-color:var(--pur);box-shadow:0 0 0 3px rgba(124,58,237,.18)}
-
-/* Toggle */
 .trow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bord)}
 .trow:last-child{border-bottom:none;padding-bottom:0}
 .tinfo strong{font-size:12px;font-weight:700;display:block}
@@ -77,17 +67,12 @@ body{display:flex;flex-direction:column}
 .tog input:checked~.tog-track{background:var(--pur);border-color:var(--pur)}
 .tog-thumb{position:absolute;top:3px;left:3px;width:15px;height:15px;background:#fff;border-radius:50%;transition:.2s;pointer-events:none}
 .tog input:checked~.tog-track~.tog-thumb{transform:translateX(17px)}
-
-/* Speed */
 .spd{display:flex;gap:6px;margin-top:6px}
 .sb{flex:1;padding:7px;border-radius:8px;background:var(--surf2);border:1px solid var(--bord);color:var(--muted2);font-size:11px;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
 .sb.on{background:rgba(124,58,237,.15);border-color:var(--pur);color:var(--txt)}
-
-/* Tabs */
 .tabs{display:flex;background:var(--surf2);border-radius:10px;padding:3px;margin-bottom:14px}
 .tab{flex:1;padding:7px;text-align:center;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:.2s}
 .tab.on{background:var(--surf3);color:var(--txt);box-shadow:0 1px 4px rgba(0,0,0,.3)}
-
 .btn{width:100%;padding:13px;border-radius:11px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:.2s;letter-spacing:.2px}
 .btn-p{background:linear-gradient(135deg,var(--pur),var(--pur2));color:#fff}
 .btn-p:hover{filter:brightness(1.12)}
@@ -98,7 +83,6 @@ body{display:flex;flex-direction:column}
 .orsep{text-align:center;color:var(--muted);font-size:11px;position:relative;margin:4px 0}
 .orsep::before,.orsep::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--bord)}
 .orsep::before{left:0}.orsep::after{right:0}
-
 .code-box{background:var(--surf2);border:1px solid var(--bord2);border-radius:12px;padding:14px;text-align:center}
 .code-big{font-size:26px;font-weight:900;letter-spacing:.3em;color:var(--pur);margin:6px 0;cursor:pointer;user-select:all}
 .code-hint{font-size:11px;color:var(--muted)}
@@ -107,13 +91,9 @@ body{display:flex;flex-direction:column}
 .wdot.on{background:#22c55e}.wdot.off{background:var(--bord2)}
 #waiting-list{display:flex;flex-direction:column;gap:5px;margin-top:4px}
 #room-lobby{display:none;margin-top:14px}
-
-/* ══ GAME SCREEN ══ */
 #s-game{display:none;flex-direction:column;padding:0}
 #s-game.active{display:flex}
 .gg{flex:1;display:grid;grid-template-columns:160px 1fr 160px;gap:var(--gap);padding:var(--gap);overflow:hidden;min-height:0}
-
-/* Sidebars */
 .sb-panel{background:var(--surf);border:1px solid var(--bord);border-radius:13px;padding:10px;display:flex;flex-direction:column;overflow:hidden}
 .sb-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--bord);margin-bottom:7px;flex-shrink:0}
 #sb-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
@@ -134,8 +114,6 @@ body{display:flex;flex-direction:column}
 .le.uno{border-left-color:#ef4444;color:#fca5a5;font-weight:700}
 .le.sys{border-left-color:var(--pur);color:#c4b5fd}
 .le.attack{border-left-color:#ef4444;color:#fca5a5;background:rgba(239,68,68,.06)}
-
-/* Arena */
 .arena{
   background:linear-gradient(180deg,#0b1120,#0f1629);
   border:1px solid var(--bord);border-radius:18px;
@@ -143,8 +121,6 @@ body{display:flex;flex-direction:column}
   padding:10px;position:relative;overflow:hidden;min-height:0
 }
 .arena-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(124,58,237,.05) 0%,transparent 65%);pointer-events:none}
-
-/* Indicators */
 .inds{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:20;white-space:nowrap}
 .ind{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid;transition:.3s}
 .ind-turn.mine{background:rgba(34,197,94,.1);border-color:#22c55e;color:#22c55e}
@@ -152,8 +128,6 @@ body{display:flex;flex-direction:column}
 .ind-dir{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:#a78bfa}
 .ind-dark{background:rgba(239,68,68,.12);border-color:#ef4444;color:#fca5a5;animation:spulse .8s ease-in-out infinite}
 @keyframes spulse{0%,100%{opacity:1}50%{opacity:.6}}
-
-/* Bot zones */
 .bot-top{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
 .bot-sides{position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;flex:1;padding:0 4px;min-height:0}
 .bot-side{display:flex;flex-direction:column;align-items:center;gap:5px}
@@ -162,13 +136,9 @@ body{display:flex;flex-direction:column}
 .ub{font-size:8px;font-weight:900;background:#ef4444;color:#fff;padding:1px 4px;border-radius:4px;display:none}
 .bhand{display:flex;justify-content:center;position:relative}
 .bhandv{display:flex;flex-direction:column;align-items:center;position:relative}
-
-/* Center */
 .center{display:flex;align-items:center;justify-content:center;gap:20px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:14px 22px;flex-shrink:0}
 .pile{display:flex;flex-direction:column;align-items:center;gap:5px}
 .pile-lbl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-
-/* Player zone */
 .pzone{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-shrink:0;position:relative;z-index:10}
 .mylbl{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--bord);border-radius:12px;padding:6px 10px;flex-shrink:0}
 .myav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
@@ -177,13 +147,9 @@ body{display:flex;flex-direction:column}
 #player-hand{display:flex;justify-content:center;align-items:flex-end;flex:1;overflow-x:auto;overflow-y:visible;padding:6px 4px 0;min-height:110px;scrollbar-width:none;position:relative;z-index:5}
 #player-hand::-webkit-scrollbar{display:none}
 #player-hand.blocked .nc{pointer-events:none!important;filter:brightness(.45)!important}
-
-/* NOVA btn */
 .nova-btn{width:50px;height:50px;border-radius:50%;border:3px solid #7f1d1d;background:#450a0a;color:#fff;font-size:10px;font-weight:900;cursor:not-allowed;opacity:.3;transition:.2s;flex-shrink:0;letter-spacing:.05em;font-family:inherit}
 .nova-btn.active{background:linear-gradient(135deg,#ef4444,#b91c1c);border-color:#ef4444;opacity:1;cursor:pointer;animation:npulse .9s ease-in-out infinite;box-shadow:0 0 16px rgba(239,68,68,.5)}
 @keyframes npulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-
-/* ══ CARDS ══ */
 .nc{
   width:var(--cw);height:var(--ch);border-radius:8px;
   border:3px solid rgba(255,255,255,.88);position:relative;
@@ -214,8 +180,6 @@ body{display:flex;flex-direction:column}
 .cb-xxs{width:18px;height:27px;font-size:5px;border-width:1.5px;border-radius:4px}
 #draw-pile{transform:rotate(-3deg);cursor:pointer;transition:.15s}
 #draw-pile:hover{transform:rotate(-3deg) scale(1.07)}
-
-/* ══ MODALS ══ */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(8px);padding:20px}
 .modal.open{display:flex}
 .mbox{background:var(--surf);border:1px solid var(--bord2);border-radius:20px;padding:24px 20px;width:100%;max-width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7)}
@@ -227,8 +191,6 @@ body{display:flex;flex-direction:column}
 #end-icon{font-size:56px;margin-bottom:10px}
 #end-title{font-size:24px;font-weight:900;margin-bottom:5px}
 #end-sub{color:var(--muted2);font-size:12px;margin-bottom:20px}
-
-/* ══ TOASTS ══ */
 #toasts{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:400;display:flex;flex-direction:column;gap:6px;pointer-events:none;min-width:180px;align-items:center}
 .toast{padding:8px 16px;border-radius:10px;font-size:12px;font-weight:700;animation:tin .3s ease-out;white-space:nowrap;text-align:center;max-width:260px;border:1px solid}
 @keyframes tin{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
@@ -237,20 +199,14 @@ body{display:flex;flex-direction:column}
 .t-u{background:#7f1d1d;border-color:#ef4444;color:#fff;font-size:16px;letter-spacing:.12em}
 .t-win{background:#14532d;border-color:#22c55e;color:#86efac;font-size:14px}
 .t-a{background:#7c2d12;border-color:#f97316;color:#fed7aa;font-size:13px}
-
-/* ══ MOBILE ══ */
 #sb-mob{display:none;background:var(--surf);border:1px solid var(--bord);border-radius:10px;padding:7px 10px;flex-wrap:wrap;gap:5px;align-items:center;justify-content:space-between;flex-shrink:0}
 .mobp{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;border:1px solid transparent;transition:.2s}
 .mobp.turn{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.4)}
-
-/* ══ ONLINE WAITING OVERLAY ══ */
 .wait-overlay{position:absolute;inset:0;background:rgba(8,9,26,.85);display:none;align-items:center;justify-content:center;z-index:100;border-radius:18px;flex-direction:column;gap:12px;text-align:center;padding:20px}
 .wait-overlay.show{display:flex}
 .spinner{width:40px;height:40px;border:4px solid var(--bord2);border-top:4px solid var(--pur);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .wait-msg{font-size:14px;font-weight:700;color:var(--muted2)}
-
-/* ══ RESPONSIVE ══ */
 @media(max-width:700px){
   :root{--cw:54px;--ch:80px;--gap:6px}
   .gg{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;padding:var(--gap);gap:var(--gap)}
@@ -275,6 +231,39 @@ body{display:flex;flex-direction:column}
   .gg{grid-template-columns:190px 1fr 190px}
 }
 </style>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  // Ta configuration exacte reçue de la console Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjxDs1KpC31RxhqttQ4RTK29ODM8glQHE",
+    authDomain: "base-de-test-4c1a5.firebaseapp.com",
+    projectId: "base-de-test-4c1a5",
+    storageBucket: "base-de-test-4c1a5.firebasestorage.app",
+    messagingSenderId: "275650264990",
+    appId: "1:275650264990:web:6cdc061a42b6d94de5208f",
+    measurementId: "G-PS2F7EKGPV",
+    databaseURL: "https://base-de-test-4c1a5-default-rtdb.firebaseio.com"
+  };
+
+  // Initialisation globale
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Exposer les fonctions au reste du script HTML classique
+  window.fbSet = async function(path, data) {
+    return set(ref(db, path), data);
+  };
+  window.fbGet = async function(path) {
+    const snapshot = await get(ref(db, path));
+    return snapshot.exists() ? snapshot.val() : null;
+  };
+  window.fbPatch = async function(path, data) {
+    return update(ref(db, path), data);
+  };
+</script>
 </head>
 <body>
 
@@ -374,7 +363,6 @@ body{display:flex;flex-direction:column}
 <div class="screen" id="s-game">
   <div id="sb-mob"></div>
   <div class="gg">
-
     <div class="sb-panel">
       <div class="sb-ttl">Tour de jeu</div>
       <div id="sb-list"></div>
@@ -481,14 +469,6 @@ body{display:flex;flex-direction:column}
 <div id="toasts"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  FIREBASE CONFIGURATION
-// ═══════════════════════════════════════════════════════
-const FB = "https://base-de-test-4c1a5-default-rtdb.firebaseio.com";
-
-// ═══════════════════════════════════════════════════════
-//  STATE Variables
-// ═══════════════════════════════════════════════════════
 let CFG = { stackPlus2:true, stackPlus4:true, fourOnTwo:true, twoOnFour:false, penalty:true, autoDraw:false, aiSpeed:1400 };
 let G = {};
 let onlineMode = false;
@@ -496,13 +476,10 @@ let myRoomCode = null;
 let myPlayerId = null;
 let isHost = false;
 let drawnPending = null;
-let fbES = null;
+let loopInterval = null;
 let lastSeenVersion = -1;
 let _cid = 0;
 
-// ═══════════════════════════════════════════════════════
-//  LOBBY FUNCTIONS
-// ═══════════════════════════════════════════════════════
 function swTab(t){
   document.getElementById('tab-solo').classList.toggle('on', t==='solo');
   document.getElementById('tab-online').classList.toggle('on', t==='online');
@@ -535,35 +512,6 @@ function copyCode(){
   if(myRoomCode){ navigator.clipboard?.writeText(myRoomCode); toast('Code copié ! 📋','t-i'); }
 }
 
-// ═══════════════════════════════════════════════════════
-//  FIREBASE REST COMMUNICATIONS
-// ═══════════════════════════════════════════════════════
-async function fbSet(path, data){
-  return fetch(`${FB}/${path}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-}
-async function fbGet(path){
-  const r = await fetch(`${FB}/${path}.json`);
-  return r.json();
-}
-async function fbPatch(path, data){
-  return fetch(`${FB}/${path}.json`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-}
-function fbListen(path, cb){
-  if(fbES){ fbES.close(); fbES=null; }
-  const es = new EventSource(`${FB}/${path}.json`);
-  es.addEventListener('put', e => {
-    try { const d=JSON.parse(e.data); cb(d.data, d.path); } catch(err){}
-  });
-  es.addEventListener('patch', e => {
-    try { const d=JSON.parse(e.data); cb(d.data, d.path); } catch(err){}
-  });
-  fbES = es;
-  return es;
-}
-
-// ═══════════════════════════════════════════════════════
-//  ONLINE ROOM LOGIC
-// ═══════════════════════════════════════════════════════
 function genCode(){
   const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let s=''; for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)];
@@ -576,6 +524,7 @@ async function createRoom(){
   readCFG();
   document.getElementById('btn-create').disabled = true;
   document.getElementById('btn-create').textContent = '⏳ Création...';
+  
   const code = genCode();
   myRoomCode = code;
   myPlayerId = 'p1';
@@ -589,12 +538,15 @@ async function createRoom(){
     gameState: null,
     version: 0
   };
+
   try {
-    await fbSet(`rooms/${code}`, room);
+    await window.fbSet(`rooms/${code}`, room);
+    setOnlineIndicator(true);
     showRoomLobby(code, true);
-    listenRoom(code);
+    startPolling(code);
     toast('Room créée ! Partage le code 🎉','t-i');
   } catch(e) {
+    setOnlineIndicator(false);
     toast('Erreur de connexion Firebase','t-w');
     document.getElementById('btn-create').disabled = false;
     document.getElementById('btn-create').textContent = '➕ Créer une room';
@@ -608,7 +560,7 @@ async function joinRoom(){
   if(!name){ toast('Écris un pseudo !','t-w'); return; }
 
   try {
-    const room = await fbGet(`rooms/${code}`);
+    const room = await window.fbGet(`rooms/${code}`);
     if(!room){ toast('Room introuvable','t-w'); return; }
     if(room.status === 'playing'){ toast('Partie déjà en cours','t-w'); return; }
     const players = room.players || {};
@@ -621,13 +573,21 @@ async function joinRoom(){
     isHost = false;
     CFG = room.config || CFG;
 
-    await fbPatch(`rooms/${code}/players`, { [newId]:{ name, ready:true, connected:true } });
+    await window.fbPatch(`rooms/${code}/players`, { [newId]:{ name, ready:true, connected:true } });
+    setOnlineIndicator(true);
     showRoomLobby(code, false);
-    listenRoom(code);
+    startPolling(code);
     toast('Room rejointe !','t-i');
   } catch(e) {
+    setOnlineIndicator(false);
     toast('Erreur de connexion','t-w');
   }
+}
+
+function setOnlineIndicator(on){
+  const dot = document.getElementById('nav-dot');
+  if(on){ dot.className = 'pdot online'; }
+  else { dot.className = 'pdot'; }
 }
 
 function showRoomLobby(code, host){
@@ -644,70 +604,50 @@ function showRoomLobby(code, host){
   }
 }
 
-function listenRoom(code){
-  let localRoom = { players: {}, status: 'waiting', gameState: null };
-
-  fbListen(`rooms/${code}`, (data, path) => {
-    if (!data) return;
-
-    if (path === '/') {
-      localRoom = { ...localRoom, ...data };
-    } else if (path.startsWith('/players')) {
-      if (!localRoom.players) localRoom.players = {};
-      const subPath = path.replace('/players', '');
-      if (subPath === '') {
-        localRoom.players = { ...localRoom.players, ...data };
-      } else {
-        const pId = subPath.replace('/', '');
-        localRoom.players[pId] = { ...localRoom.players[pId], ...data };
-      }
-    } else if (path.startsWith('/gameState')) {
-      if (!localRoom.gameState) localRoom.gameState = {};
-      const subPath = path.replace('/gameState', '');
-      if (subPath === '') localRoom.gameState = { ...localRoom.gameState, ...data };
-      else localRoom.gameState[subPath.replace('/', '')] = data;
-    } else {
-      const key = path.replace('/', '');
-      localRoom[key] = data;
-    }
-
-    if (localRoom.players) {
-      const pl = Object.entries(localRoom.players);
-      const wl = document.getElementById('waiting-list');
-      if (wl) {
-        wl.innerHTML = '';
-        pl.forEach(([id, p]) => {
-          if (!p) return;
-          const d = document.createElement('div');
-          d.className = 'wslot';
-          d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
-          wl.appendChild(d);
-        });
-      }
+function startPolling(code){
+  if(loopInterval) clearInterval(loopInterval);
+  loopInterval = setInterval(async () => {
+    try {
+      const room = await window.fbGet(`rooms/${code}`);
+      if(!room) return;
+      setOnlineIndicator(true);
       
-      if (isHost) {
-        const n = pl.length;
-        const btnStart = document.getElementById('btn-start');
-        if (btnStart) {
-          btnStart.textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
+      if(room.players){
+        const pl = Object.entries(room.players);
+        const wl = document.getElementById('waiting-list');
+        if(wl){
+          wl.innerHTML = '';
+          pl.forEach(([id, p]) => {
+            if(!p) return;
+            const d = document.createElement('div');
+            d.className = 'wslot';
+            d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
+            wl.appendChild(d);
+          });
+        }
+        if(isHost){
+          const btnStart = document.getElementById('btn-start');
+          if(btnStart) btnStart.textContent = `▶ Démarrer (${pl.length} joueur${pl.length>1?'s':''})`;
         }
       }
-    }
 
-    if (localRoom.status === 'playing' && localRoom.gameState && localRoom.gameState.version > lastSeenVersion) {
-      lastSeenVersion = localRoom.gameState.version || 0;
-      if (!G.active) {
-        startFromState(localRoom.gameState, localRoom.players, localRoom.config || CFG);
-      } else {
-        syncState(localRoom.gameState);
+      if(room.status === 'playing' && room.gameState && room.gameState.version > lastSeenVersion){
+        lastSeenVersion = room.gameState.version || 0;
+        if(!G.active){
+          startFromState(room.gameState, room.players, room.config || CFG);
+        } else {
+          syncState(room.gameState);
+        }
       }
+    } catch(err) {
+      setOnlineIndicator(false);
     }
-  });
+  }, 1000);
 }
 
 async function startOnline(){
   if(!isHost) return;
-  const room = await fbGet(`rooms/${myRoomCode}`);
+  const room = await window.fbGet(`rooms/${myRoomCode}`);
   const players = room.players || {};
   const playerList = Object.entries(players).map(([id,p])=>({id, name:p.name}));
   if(playerList.length < 1){ toast('Besoin d\'au moins 1 joueur !','t-w'); return; }
@@ -715,7 +655,7 @@ async function startOnline(){
   readCFG();
   const state = buildOnlineState(playerList);
   state.version = 1;
-  await fbPatch(`rooms/${myRoomCode}`, { status:'playing', gameState: state, config: CFG });
+  await window.fbPatch(`rooms/${myRoomCode}`, { status:'playing', gameState: state, config: CFG });
 }
 
 function buildOnlineState(playerList){
@@ -738,7 +678,6 @@ function startFromState(state, roomPlayers, config){
   G.players.forEach(p => { if(p.id === myPlayerId) p.isMe = true; });
   G.players.forEach(p => { p.type = p.id === myPlayerId ? 'player' : 'online'; });
   
-  // Masquer les IA non requises si joueurs réels
   document.getElementById('zone-sophie').style.display = G.players.length >= 4 ? 'flex' : 'none';
   document.getElementById('zone-lucas').style.display = G.players.length >= 2 ? 'flex' : 'none';
   document.getElementById('zone-mila').style.display = G.players.length >= 3 ? 'flex' : 'none';
@@ -773,12 +712,9 @@ async function pushState(){
   stateToSave.version = (stateToSave.version||0) + 1;
   lastSeenVersion = stateToSave.version;
   stateToSave.players.forEach(p=>{ delete p.isMe; p.type='human'; });
-  await fbPatch(`rooms/${myRoomCode}`, { gameState: stateToSave });
+  await window.fbPatch(`rooms/${myRoomCode}`, { gameState: stateToSave });
 }
 
-// ═══════════════════════════════════════════════════════
-//  INTERFACE ANIMATION ENGINE
-// ═══════════════════════════════════════════════════════
 function showWaitOverlay(msg){
   const o = document.getElementById('wait-overlay');
   document.getElementById('wait-msg').textContent = msg || 'En attente...';
@@ -788,13 +724,9 @@ function hideWaitOverlay(){
   document.getElementById('wait-overlay').classList.remove('show');
 }
 
-// ═══════════════════════════════════════════════════════
-//  DECK GENERATION & CARD MECHANICS
-// ═══════════════════════════════════════════════════════
 function mc(color,value){ return {id:++_cid, color, value}; }
 function buildDeck(){
-  _cid=0;
-  const d=[];
+  _cid=0; const d=[];
   ['red','blue','green','yellow'].forEach(col=>{
     d.push(mc(col,'0'));
     for(let n=1;n<=9;n++){ d.push(mc(col,''+n)); d.push(mc(col,''+n)); }
@@ -817,10 +749,8 @@ function drawCard(state){
   return state.deck.pop();
 }
 
-// ═══════════════════════════════════════════════════════
-//  SOLO ARCHITECTURE
-// ═══════════════════════════════════════════════════════
 function startSolo(){
+  if(loopInterval) { clearInterval(loopInterval); loopInterval=null; }
   readCFG();
   onlineMode = false;
   _cid=0;
@@ -855,19 +785,16 @@ function startSolo(){
 
 function restartGame(){
   document.getElementById('modal-end').classList.remove('open');
-  if(onlineMode){
-    document.getElementById('s-game').classList.remove('active');
-    document.getElementById('s-lobby').classList.add('active');
-    document.getElementById('hdr-meta').style.display='none';
-    onlineMode=false; G={}; myRoomCode=null; myPlayerId=null; isHost=false;
-    if(fbES){ fbES.close(); fbES=null; }
-    document.getElementById('room-lobby').style.display='none';
-    document.getElementById('room-pill').classList.remove('on');
-  } else {
-    const name = G.players.find(p=>p.type==='player')?.name || 'Joueur';
-    document.getElementById('inp-name').value = name;
-    startSolo();
-  }
+  if(loopInterval) clearInterval(loopInterval);
+  document.getElementById('s-game').classList.remove('active');
+  document.getElementById('s-lobby').classList.add('active');
+  document.getElementById('hdr-meta').style.display='none';
+  onlineMode=false; G={}; myRoomCode=null; myPlayerId=null; isHost=false;
+  document.getElementById('room-lobby').style.display='none';
+  document.getElementById('room-pill').classList.remove('on');
+  document.getElementById('btn-create').disabled = false;
+  document.getElementById('btn-create').textContent = '➕ Créer une room';
+  setOnlineIndicator(false);
 }
 
 function initDisplay(){
@@ -878,13 +805,9 @@ function initDisplay(){
   renderAll();
 }
 
-// ═══════════════════════════════════════════════════════
-//  GAME RULES MATRIX
-// ═══════════════════════════════════════════════════════
 const SYM={skip:'⊘',rev:'↻','+2':'+2','+4':'+4',wild:'★','0':'0'};
 const CN={red:'Rouge',blue:'Bleu',green:'Vert',yellow:'Jaune',wild:'Joker'};
 function sym(v){ return SYM[v]||v; }
-
 function topCard(){ return G.discard[G.discard.length-1]; }
 function myPlayer(){ return G.players?.find(p=>p.type==='player')||G.players?.[0]; }
 function myIdx(){ const i=G.players?.findIndex(p=>p.type==='player'); return i>=0?i:0; }
@@ -907,9 +830,6 @@ function canDefend(card){
   return false;
 }
 
-// ═══════════════════════════════════════════════════════
-//  CORE ENGINE PIPELINE
-// ═══════════════════════════════════════════════════════
 function gameLoop(){
   if(!G.active) return;
   renderAll();
@@ -924,9 +844,6 @@ function gameLoop(){
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  AI DECISION SYSTEM
-// ═══════════════════════════════════════════════════════
 function botTurn(){
   if(!G.active) return;
   const bot = G.players[G.turnIdx];
@@ -969,9 +886,6 @@ function botTurn(){
   doPlay(bot,chosen,G.turnIdx);
 }
 
-// ═══════════════════════════════════════════════════════
-//  RESOLVE ROUND EFFECT
-// ═══════════════════════════════════════════════════════
 function doPlay(player, card, playerIdx){
   player.hand = player.hand.filter(c=>c.id!==card.id);
   G.discard.push(card);
@@ -1009,9 +923,6 @@ function advanceTurn(){
   gameLoop();
 }
 
-// ═══════════════════════════════════════════════════════
-//  HUMAN CONTROLS
-// ═══════════════════════════════════════════════════════
 function playMyCard(cardId){
   if(G.turnIdx!==myIdx()||!G.active) return;
   const me=myPlayer();
@@ -1075,9 +986,6 @@ function callNova(){
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  COLOR INTERACTION MODAL
-// ═══════════════════════════════════════════════════════
 let _cr=null;
 function openColorPicker(card,playerIdx){
   document.getElementById('modal-color').classList.add('open');
@@ -1093,9 +1001,6 @@ function openColorPicker(card,playerIdx){
 }
 function pickColor(c){ if(_cr){ _cr(c); _cr=null; } }
 
-// ═══════════════════════════════════════════════════════
-//  APPLY CARD ACTION MATRIX
-// ═══════════════════════════════════════════════════════
 function applyEffect(card, playerIdx, silent){
   if(card.value==='+2'){
     G.attackType='+2'; G.pendingDraw+=2;
@@ -1113,9 +1018,6 @@ function applyEffect(card, playerIdx, silent){
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  TERMINATE GAME
-// ═══════════════════════════════════════════════════════
 function endGame(winner){
   G.active=false;
   const isMe = winner.type==='player';
@@ -1129,13 +1031,10 @@ function endGame(winner){
     const s = JSON.parse(JSON.stringify(G));
     s.active=false; s.winner=winner.id;
     s.players.forEach(p=>{p.type='human';delete p.isMe;});
-    fbPatch(`rooms/${myRoomCode}`,{gameState:s});
+    window.fbPatch(`rooms/${myRoomCode}`,{gameState:s});
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  GRAPHICS RENDERING PIPELINE
-// ═══════════════════════════════════════════════════════
 function cardClass(c){
   const isNum = !isNaN(c.value) && c.color!=='wild';
   return `nc c-${c.color}${isNum?' is-num':''}`;
@@ -1245,11 +1144,7 @@ function renderSidebars(){
     const av=avatars[p.id]||(p.name?p.name.slice(0,2).toUpperCase():'?');
     const row=document.createElement('div');
     row.className='prow'+(isT?' turn':'');
-    row.innerHTML=`<div class="pav" style="background:${p.color||'#1e40af'}">${av}</div>
-      <div class="pinfo">
-        <div class="pname">${p.name}${p.type==='player'?' 👤':p.type==='online'?' 🌐':''}</div>
-        <div class="pcards">${p.hand.length} carte${p.hand.length>1?'s':''}</div>
-      </div>${isT?'<div class="parr">›</div>':''}${p.hand.length===1?'<span class="puno">NOVA!</span>':''}`;
+    row.innerHTML=`<div class="pav" style="background:${p.color||'#1e40af'}">${av}</div>\n      <div class="pinfo">\n        <div class="pname">${p.name}${p.type==='player'?' 👤':p.type==='online'?' 🌐':''}</div>\n        <div class="pcards">${p.hand.length} carte${p.hand.length>1?'s':''}</div>\n      </div>${isT?'<div class="parr">›</div>':''}${p.hand.length===1?'<span class="puno">NOVA!</span>':''}`;
     list.appendChild(row);
     const m=document.createElement('div');
     m.className='mobp'+(isT?' turn':'');
@@ -1284,9 +1179,6 @@ function updateNovaBtn(){
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  DIAGNOSTICS LOGGER
-// ═══════════════════════════════════════════════════════
 function log(txt, type){
   const el=document.getElementById('game-log');
   if(!el) return;
@@ -1306,10 +1198,6 @@ function toast(msg, cls){
   setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .4s'; },2200);
   setTimeout(()=>t.remove(),2700);
 }
-
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('inp-name').focus();
-});
 </script>
 </body>
 </html>
