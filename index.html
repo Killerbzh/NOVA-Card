@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>NOVA Cards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -150,7 +150,7 @@ body{display:flex;flex-direction:column}
 .ind-turn.mine{background:rgba(34,197,94,.1);border-color:#22c55e;color:#22c55e}
 .ind-turn.theirs{background:rgba(100,116,139,.08);border-color:var(--bord);color:var(--muted)}
 .ind-dir{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:#a78bfa}
-.ind-stack{background:rgba(239,68,68,.12);border-color:#ef4444;color:#fca5a5;animation:spulse .8s ease-in-out infinite}
+.ind-dark{background:rgba(239,68,68,.12);border-color:#ef4444;color:#fca5a5;animation:spulse .8s ease-in-out infinite}
 @keyframes spulse{0%,100%{opacity:1}50%{opacity:.6}}
 
 /* Bot zones */
@@ -279,7 +279,6 @@ body{display:flex;flex-direction:column}
 </head>
 <body>
 
-<!-- HEADER -->
 <div id="hdr">
   <div class="logo">
     <div class="logo-icon">🃏</div>
@@ -301,7 +300,6 @@ body{display:flex;flex-direction:column}
 
 <div id="screens">
 
-<!-- ══ LOBBY ══ -->
 <div class="screen active" id="s-lobby">
 <div class="lw">
   <div class="hero">
@@ -310,16 +308,14 @@ body{display:flex;flex-direction:column}
     <p>Jeu de cartes style UNO — solo contre l'IA ou en ligne avec tes amis</p>
   </div>
 
-  <!-- Pseudo -->
   <div class="box">
-    <h2>👤 Ton profil</h2>
+    <h2>👤 Profil</h2>
     <div class="fl">
       <label>Pseudo</label>
       <input class="fi" id="inp-name" placeholder="Ton pseudo..." maxlength="14" onkeydown="if(event.key==='Enter')startSolo()">
     </div>
   </div>
 
-  <!-- Règles maison -->
   <div class="box">
     <h2>⚙️ Règles maison</h2>
     <div class="trow"><div class="tinfo"><strong>Empiler les +2</strong><span>Joue un +2 sur un +2 pour cumuler</span></div><label class="tog"><input type="checkbox" id="r-stack2" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
@@ -327,10 +323,9 @@ body{display:flex;flex-direction:column}
     <div class="trow"><div class="tinfo"><strong>+4 bloque un +2</strong><span>Un +4 peut contrer un +2</span></div><label class="tog"><input type="checkbox" id="r-4on2" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
     <div class="trow"><div class="tinfo"><strong>+2 bloque un +4</strong><span>Un +2 peut contrer un +4</span></div><label class="tog"><input type="checkbox" id="r-2on4"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
     <div class="trow"><div class="tinfo"><strong>Pénalité oubli NOVA</strong><span>+2 cartes si tu oublies NOVA !</span></div><label class="tog"><input type="checkbox" id="r-penalty" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
-    <div class="trow"><div class="tinfo"><strong>Pioché = jouer si possible</strong><span>Carte pioché jouée automatiquement</span></div><label class="tog"><input type="checkbox" id="r-autodraw"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+    <div class="trow"><div class="tinfo"><strong>Pioché = jouer si possible</strong><span>Carte piochée jouée automatiquement</span></div><label class="tog"><input type="checkbox" id="r-autodraw"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
   </div>
 
-  <!-- Vitesse IA -->
   <div class="box">
     <h2>🤖 Vitesse IA (solo)</h2>
     <div class="spd">
@@ -340,7 +335,6 @@ body{display:flex;flex-direction:column}
     </div>
   </div>
 
-  <!-- Mode de jeu -->
   <div class="box">
     <h2>🌐 Mode de jeu</h2>
     <div class="tabs">
@@ -376,7 +370,6 @@ body{display:flex;flex-direction:column}
     </div>
   </div>
 
-  <!-- Infos online -->
   <div class="box" id="info-online" style="display:none">
     <h2>ℹ️ Comment jouer en ligne</h2>
     <p style="font-size:12px;color:var(--muted2);line-height:1.6">
@@ -391,18 +384,15 @@ body{display:flex;flex-direction:column}
 </div>
 </div>
 
-<!-- ══ GAME ══ -->
 <div class="screen" id="s-game">
   <div id="sb-mob"></div>
   <div class="gg">
 
-    <!-- Sidebar joueurs -->
     <div class="sb-panel">
       <div class="sb-ttl">Tour de jeu</div>
       <div id="sb-list"></div>
     </div>
 
-    <!-- Arène -->
     <div class="arena">
       <div class="arena-bg"></div>
       <div class="wait-overlay" id="wait-overlay">
@@ -413,10 +403,9 @@ body{display:flex;flex-direction:column}
       <div class="inds">
         <div class="ind ind-turn theirs" id="ind-turn">⏳ Préparation...</div>
         <div class="ind ind-dir" id="ind-dir">↻ Normal</div>
-        <div class="ind ind-stack" id="ind-stack" style="display:none">🔥 +<span id="stack-n">0</span></div>
+        <div class="ind ind-dark" id="ind-stack" style="display:none">🔥 +<span id="stack-n">0</span></div>
       </div>
 
-      <!-- Sophie (haut) -->
       <div class="bot-top" id="zone-sophie">
         <div class="blbl" id="lbl-sophie">
           <div class="bico" style="background:#1e40af">🤖</div>
@@ -426,7 +415,6 @@ body{display:flex;flex-direction:column}
         <div class="bhand" id="h-sophie"></div>
       </div>
 
-      <!-- Sides + Center -->
       <div class="bot-sides">
         <div class="bot-side" id="zone-lucas">
           <div class="blbl" id="lbl-lucas">
@@ -460,7 +448,6 @@ body{display:flex;flex-direction:column}
         </div>
       </div>
 
-      <!-- Player zone -->
       <div class="pzone">
         <div class="mylbl">
           <div class="myav" id="my-av">?</div>
@@ -474,7 +461,6 @@ body{display:flex;flex-direction:column}
       </div>
     </div>
 
-    <!-- Sidebar log -->
     <div class="sb-panel">
       <div class="sb-ttl">Journal</div>
       <div id="game-log"></div>
@@ -482,10 +468,7 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-</div><!-- /screens -->
-
-<!-- MODAL COULEUR -->
-<div class="modal" id="modal-color">
+</div><div class="modal" id="modal-color">
   <div class="mbox">
     <h3>Choisir une couleur</h3>
     <div class="cgrid">
@@ -497,7 +480,6 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-<!-- MODAL FIN -->
 <div class="modal" id="modal-end">
   <div class="mbox">
     <div id="end-icon">🏆</div>
@@ -511,11 +493,9 @@ body{display:flex;flex-direction:column}
 
 <script>
 // ═══════════════════════════════════════════════════════
-//  FIREBASE CONFIG
-//  ⚠️ Remplace par ton propre projet Firebase si besoin
-//  Ce projet est public en read/write — parfait pour tester
+//  FIREBASE CONFIG (Utilise la base de test-4c1a5)
 // ═══════════════════════════════════════════════════════
-const FB = "https://nova-cards-default-rtdb.firebaseio.com";
+const FB = "https://base-de-test-4c1a5-default-rtdb.firebaseio.com";
 
 // ═══════════════════════════════════════════════════════
 //  STATE
@@ -678,7 +658,6 @@ function showRoomLobby(code, host){
 
 function listenRoom(code){
   fbListen(`rooms/${code}`, (data, path) => {
-    // Update player list in lobby
     if(data.players){
       const pl = Object.entries(data.players);
       const wl = document.getElementById('waiting-list');
@@ -689,20 +668,16 @@ function listenRoom(code){
         d.innerHTML = `<div class="wdot on"></div><span>${p.name}${id===myPlayerId?' <em style="color:var(--pur)">(toi)</em>':''}</span>`;
         wl.appendChild(d);
       });
-      // Update start button count
       if(isHost){
         const n = pl.length;
         document.getElementById('btn-start').textContent = `▶ Démarrer (${n} joueur${n>1?'s':''})`;
       }
     }
-    // Game started
     if(data.status === 'playing' && data.gameState && data.gameState.version > lastSeenVersion){
       lastSeenVersion = data.gameState.version || 0;
       if(!G.active){
-        // Fresh start
         startFromState(data.gameState, data.players, data.config || CFG);
       } else {
-        // Sync ongoing game (opponent played)
         syncState(data.gameState);
       }
     }
@@ -739,9 +714,7 @@ function startFromState(state, roomPlayers, config){
   CFG = config || CFG;
   G = JSON.parse(JSON.stringify(state));
   G.active = true;
-  // Mark my player
   G.players.forEach(p => { if(p.id === myPlayerId) p.isMe = true; });
-  // For online: all players are "human" type, only mine is interactive
   G.players.forEach(p => { p.type = p.id === myPlayerId ? 'player' : 'online'; });
   initDisplay();
   showGame();
@@ -749,17 +722,14 @@ function startFromState(state, roomPlayers, config){
   gameLoop();
 }
 
-// Sync state from Firebase (opponent made a move)
 function syncState(state){
   if(!onlineMode) return;
-  const myOldHand = G.players.find(p=>p.id===myPlayerId)?.hand;
   G = JSON.parse(JSON.stringify(state));
   G.active = true;
   G.players.forEach(p => {
     if(p.id === myPlayerId){ p.isMe=true; p.type='player'; }
     else { p.type='online'; }
   });
-  // If game ended
   if(state.winner){
     G.active = false;
     endGame(G.players.find(p=>p.id===state.winner) || G.players[0]);
@@ -770,13 +740,11 @@ function syncState(state){
   gameLoop();
 }
 
-// Push state to Firebase after my move
 async function pushState(){
   if(!onlineMode || !myRoomCode) return;
   const stateToSave = JSON.parse(JSON.stringify(G));
   stateToSave.version = (stateToSave.version||0) + 1;
   lastSeenVersion = stateToSave.version;
-  // Strip isMe markers for storage
   stateToSave.players.forEach(p=>{ delete p.isMe; p.type='human'; });
   await fbPatch(`rooms/${myRoomCode}`, { gameState: stateToSave });
 }
@@ -856,7 +824,6 @@ function startSolo(){
 function restartGame(){
   document.getElementById('modal-end').classList.remove('open');
   if(onlineMode){
-    // Go back to lobby for online
     document.getElementById('s-game').classList.remove('active');
     document.getElementById('s-lobby').classList.add('active');
     document.getElementById('hdr-meta').style.display='none';
@@ -919,10 +886,8 @@ function gameLoop(){
   if(cur.type==='bot'){
     setTimeout(botTurn, CFG.aiSpeed);
   } else if(cur.type==='online'){
-    // Show waiting overlay
     showWaitOverlay(`⏳ Tour de ${cur.name}...`);
   } else {
-    // My turn
     hideWaitOverlay();
   }
 }
@@ -1025,7 +990,6 @@ function playMyCard(cardId){
   if(G.pendingDraw>0&&!canDefend(card)){ toast(`Joue un ${G.attackType} pour contrer, ou pioche !`,'t-w'); return; }
   drawnPending=null;
   doPlay(me,card,myIdx());
-  // Penalty check
   if(CFG.penalty&&me.hand.length===1&&!G.saidNova){
     for(let i=0;i<2;i++) me.hand.push(drawCard(G));
     log('Tu oublies NOVA ! +2 pénalité 😅','attack');
@@ -1129,7 +1093,6 @@ function endGame(winner){
   document.getElementById('modal-end').classList.add('open');
   log(isMe?'🏆 Tu as gagné la partie !':'💀 Défaite...','sys');
   if(isMe) toast('🏆 Victoire !','t-win');
-  // Push winner to Firebase for others
   if(onlineMode && isMe) {
     const s = JSON.parse(JSON.stringify(G));
     s.active=false; s.winner=winner.id;
@@ -1312,7 +1275,6 @@ function toast(msg, cls){
   setTimeout(()=>t.remove(),2700);
 }
 
-// Init — show online tab info on load
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('inp-name').focus();
 });
