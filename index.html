@@ -236,7 +236,7 @@ body{display:flex;flex-direction:column}
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  // Ta configuration exacte reçue de la console Firebase
+  // Ta configuration exacte avec ton URL européenne (europe-west1)
   const firebaseConfig = {
     apiKey: "AIzaSyCjxDs1KpC31RxhqttQ4RTK29ODM8glQHE",
     authDomain: "base-de-test-4c1a5.firebaseapp.com",
@@ -245,7 +245,7 @@ body{display:flex;flex-direction:column}
     messagingSenderId: "275650264990",
     appId: "1:275650264990:web:6cdc061a42b6d94de5208f",
     measurementId: "G-PS2F7EKGPV",
-    databaseURL: "https://base-de-test-4c1a5-default-rtdb.firebaseio.com"
+    databaseURL: "https://base-de-test-4c1a5-default-rtdb.europe-west1.firebasedatabase.app"
   };
 
   // Initialisation globale
