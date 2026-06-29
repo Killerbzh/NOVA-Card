@@ -95,7 +95,7 @@ body{display:flex;flex-direction:column}
 .btn-o{background:transparent;border:1px solid var(--bord2);color:var(--muted2)}
 .btn-o:hover{border-color:var(--pur);color:var(--txt)}
 .btn-p:disabled,.btn-o:disabled{opacity:.5;cursor:not-allowed}
-.orsep text-align:center;color:var(--muted);font-size:11px;position:relative;margin:4px 0}
+.orsep{text-align:center;color:var(--muted);font-size:11px;position:relative;margin:4px 0}
 .orsep::before,.orsep::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--bord)}
 .orsep::before{left:0}.orsep::after{right:0}
 
@@ -117,7 +117,7 @@ body{display:flex;flex-direction:column}
 .sb-panel{background:var(--surf);border:1px solid var(--bord);border-radius:13px;padding:10px;display:flex;flex-direction:column;overflow:hidden}
 .sb-ttl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--bord);margin-bottom:7px;flex-shrink:0}
 #sb-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
-.prow{display:flex;align-items:center;gap:77px;padding:6px 8px;border-radius:8px;border:1px solid transparent;transition:.2s}
+.prow{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;border:1px solid transparent;transition:.2s}
 .prow.turn{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.35)}
 .pav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700}
 .pinfo{flex:1;min-width:0}
@@ -238,12 +238,12 @@ body{display:flex;flex-direction:column}
 .t-win{background:#14532d;border-color:#22c55e;color:#86efac;font-size:14px}
 .t-a{background:#7c2d12;border-color:#f97316;color:#fed7aa;font-size:13px}
 
-/* ══ MOBILE sb-mobile ══ */
+/* ══ MOBILE ══ */
 #sb-mob{display:none;background:var(--surf);border:1px solid var(--bord);border-radius:10px;padding:7px 10px;flex-wrap:wrap;gap:5px;align-items:center;justify-content:space-between;flex-shrink:0}
 .mobp{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;border:1px solid transparent;transition:.2s}
 .mobp.turn{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.4)}
 
-/* ══ ONLINE WAITING INDICATOR ══ */
+/* ══ ONLINE WAITING OVERLAY ══ */
 .wait-overlay{position:absolute;inset:0;background:rgba(8,9,26,.85);display:none;align-items:center;justify-content:center;z-index:100;border-radius:18px;flex-direction:column;gap:12px;text-align:center;padding:20px}
 .wait-overlay.show{display:flex}
 .spinner{width:40px;height:40px;border:4px solid var(--bord2);border-top:4px solid var(--pur);border-radius:50%;animation:spin 1s linear infinite}
@@ -270,7 +270,6 @@ body{display:flex;flex-direction:column}
   .nc:not(.is-num) .cv{font-size:18px}
   .center{padding:8px 10px;gap:10px}
 }
-/* PC touch-friendly sizing */
 @media(min-width:1200px){
   :root{--cw:76px;--ch:112px}
   .gg{grid-template-columns:190px 1fr 190px}
@@ -369,18 +368,6 @@ body{display:flex;flex-direction:column}
       </div>
     </div>
   </div>
-
-  <div class="box" id="info-online" style="display:none">
-    <h2>ℹ️ Comment jouer en ligne</h2>
-    <p style="font-size:12px;color:var(--muted2);line-height:1.6">
-      1. Crée une room → un code à 6 lettres apparaît<br>
-      2. Envoie le code à tes amis<br>
-      3. Ils ouvrent ce fichier et saisissent le code<br>
-      4. Quand tout le monde est là, l'hôte démarre<br>
-      <br>
-      <span style="color:#fcd34d">⚠️ Connecté à ta base Firebase Realtime</span>
-    </p>
-  </div>
 </div>
 </div>
 
@@ -468,7 +455,9 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-</div><div class="modal" id="modal-color">
+</div>
+
+<div class="modal" id="modal-color">
   <div class="mbox">
     <h3>Choisir une couleur</h3>
     <div class="cgrid">
@@ -493,12 +482,12 @@ body{display:flex;flex-direction:column}
 
 <script>
 // ═══════════════════════════════════════════════════════
-//  FIREBASE CONFIG (URL de ta base active)
+//  FIREBASE CONFIGURATION
 // ═══════════════════════════════════════════════════════
 const FB = "https://base-de-test-4c1a5-default-rtdb.firebaseio.com";
 
 // ═══════════════════════════════════════════════════════
-//  STATE
+//  STATE Variables
 // ═══════════════════════════════════════════════════════
 let CFG = { stackPlus2:true, stackPlus4:true, fourOnTwo:true, twoOnFour:false, penalty:true, autoDraw:false, aiSpeed:1400 };
 let G = {};
@@ -507,19 +496,18 @@ let myRoomCode = null;
 let myPlayerId = null;
 let isHost = false;
 let drawnPending = null;
-let fbES = null; // EventSource for real-time
+let fbES = null;
 let lastSeenVersion = -1;
 let _cid = 0;
 
 // ═══════════════════════════════════════════════════════
-//  LOBBY UI
+//  LOBBY FUNCTIONS
 // ═══════════════════════════════════════════════════════
 function swTab(t){
   document.getElementById('tab-solo').classList.toggle('on', t==='solo');
   document.getElementById('tab-online').classList.toggle('on', t==='online');
   document.getElementById('zone-solo').style.display = t==='solo'?'block':'none';
   document.getElementById('zone-online').style.display = t==='online'?'block':'none';
-  document.getElementById('info-online').style.display = t==='online'?'block':'none';
 }
 function setSpd(ms, el){
   CFG.aiSpeed = ms;
@@ -548,7 +536,7 @@ function copyCode(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  FIREBASE REST HELPERS
+//  FIREBASE REST COMMUNICATIONS
 // ═══════════════════════════════════════════════════════
 async function fbSet(path, data){
   return fetch(`${FB}/${path}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
@@ -574,7 +562,7 @@ function fbListen(path, cb){
 }
 
 // ═══════════════════════════════════════════════════════
-//  ROOM MANAGEMENT
+//  ONLINE ROOM LOGIC
 // ═══════════════════════════════════════════════════════
 function genCode(){
   const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -749,6 +737,12 @@ function startFromState(state, roomPlayers, config){
   G.active = true;
   G.players.forEach(p => { if(p.id === myPlayerId) p.isMe = true; });
   G.players.forEach(p => { p.type = p.id === myPlayerId ? 'player' : 'online'; });
+  
+  // Masquer les IA non requises si joueurs réels
+  document.getElementById('zone-sophie').style.display = G.players.length >= 4 ? 'flex' : 'none';
+  document.getElementById('zone-lucas').style.display = G.players.length >= 2 ? 'flex' : 'none';
+  document.getElementById('zone-mila').style.display = G.players.length >= 3 ? 'flex' : 'none';
+
   initDisplay();
   showGame();
   hideWaitOverlay();
@@ -783,11 +777,11 @@ async function pushState(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  WAIT OVERLAY
+//  INTERFACE ANIMATION ENGINE
 // ═══════════════════════════════════════════════════════
 function showWaitOverlay(msg){
   const o = document.getElementById('wait-overlay');
-  document.getElementById('wait-msg').textContent = msg || 'En attente des autres joueurs...';
+  document.getElementById('wait-msg').textContent = msg || 'En attente...';
   o.classList.add('show');
 }
 function hideWaitOverlay(){
@@ -795,7 +789,7 @@ function hideWaitOverlay(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  DECK
+//  DECK GENERATION & CARD MECHANICS
 // ═══════════════════════════════════════════════════════
 function mc(color,value){ return {id:++_cid, color, value}; }
 function buildDeck(){
@@ -824,7 +818,7 @@ function drawCard(state){
 }
 
 // ═══════════════════════════════════════════════════════
-//  SOLO GAME INIT
+//  SOLO ARCHITECTURE
 // ═══════════════════════════════════════════════════════
 function startSolo(){
   readCFG();
@@ -832,6 +826,11 @@ function startSolo(){
   _cid=0;
   const deck=shuffle(buildDeck());
   const myName=getName();
+  
+  document.getElementById('zone-sophie').style.display = 'flex';
+  document.getElementById('zone-lucas').style.display = 'flex';
+  document.getElementById('zone-mila').style.display = 'flex';
+
   G={
     deck, discard:[],
     players:[
@@ -840,13 +839,13 @@ function startSolo(){
       {id:'mila',  name:'Mila',  hand:[], type:'bot', color:'#831843', icon:'🐱'},
       {id:'sophie',name:'Sophie',hand:[], type:'bot', color:'#1e40af', icon:'🤖'},
     ],
-    turnIdx:0, direction:1, pendingDraw:0, attackType:null, active:false, saidNova:false
+    turnIdx:1, direction:1, pendingDraw:0, attackType:null, active:false, saidNova:false
   };
   G.players.forEach(p=>{ for(let i=0;i<7;i++) p.hand.push(drawCard(G)); });
   let sc;
   while(true){ sc=drawCard(G); if(sc.color!=='wild') break; G.deck.unshift(sc); }
   G.discard.push(sc);
-  applyEffect(sc,-1,true);
+  applyEffect(sc,1,true);
   initDisplay();
   G.active=true;
   showGame();
@@ -880,15 +879,15 @@ function initDisplay(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  HELPERS
+//  GAME RULES MATRIX
 // ═══════════════════════════════════════════════════════
 const SYM={skip:'⊘',rev:'↻','+2':'+2','+4':'+4',wild:'★','0':'0'};
 const CN={red:'Rouge',blue:'Bleu',green:'Vert',yellow:'Jaune',wild:'Joker'};
 function sym(v){ return SYM[v]||v; }
 
 function topCard(){ return G.discard[G.discard.length-1]; }
-function myPlayer(){ return G.players?.find(p=>p.type==='player')||G.players?.[1]; }
-function myIdx(){ const i=G.players?.findIndex(p=>p.type==='player'); return i>=0?i:1; }
+function myPlayer(){ return G.players?.find(p=>p.type==='player')||G.players?.[0]; }
+function myIdx(){ const i=G.players?.findIndex(p=>p.type==='player'); return i>=0?i:0; }
 function nextIdx(from,d){ return((from+(d||G.direction))+G.players.length)%G.players.length; }
 
 function isPlayable(card,top){
@@ -909,7 +908,7 @@ function canDefend(card){
 }
 
 // ═══════════════════════════════════════════════════════
-//  GAME LOOP
+//  CORE ENGINE PIPELINE
 // ═══════════════════════════════════════════════════════
 function gameLoop(){
   if(!G.active) return;
@@ -926,7 +925,7 @@ function gameLoop(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  BOT AI
+//  AI DECISION SYSTEM
 // ═══════════════════════════════════════════════════════
 function botTurn(){
   if(!G.active) return;
@@ -971,7 +970,7 @@ function botTurn(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  PLAY CARD
+//  RESOLVE ROUND EFFECT
 // ═══════════════════════════════════════════════════════
 function doPlay(player, card, playerIdx){
   player.hand = player.hand.filter(c=>c.id!==card.id);
@@ -1011,7 +1010,7 @@ function advanceTurn(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  PLAYER ACTIONS
+//  HUMAN CONTROLS
 // ═══════════════════════════════════════════════════════
 function playMyCard(cardId){
   if(G.turnIdx!==myIdx()||!G.active) return;
@@ -1077,7 +1076,7 @@ function callNova(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  COLOR PICKER
+//  COLOR INTERACTION MODAL
 // ═══════════════════════════════════════════════════════
 let _cr=null;
 function openColorPicker(card,playerIdx){
@@ -1095,7 +1094,7 @@ function openColorPicker(card,playerIdx){
 function pickColor(c){ if(_cr){ _cr(c); _cr=null; } }
 
 // ═══════════════════════════════════════════════════════
-//  CARD EFFECTS
+//  APPLY CARD ACTION MATRIX
 // ═══════════════════════════════════════════════════════
 function applyEffect(card, playerIdx, silent){
   if(card.value==='+2'){
@@ -1115,7 +1114,7 @@ function applyEffect(card, playerIdx, silent){
 }
 
 // ═══════════════════════════════════════════════════════
-//  END GAME
+//  TERMINATE GAME
 // ═══════════════════════════════════════════════════════
 function endGame(winner){
   G.active=false;
@@ -1135,7 +1134,7 @@ function endGame(winner){
 }
 
 // ═══════════════════════════════════════════════════════
-//  RENDER
+//  GRAPHICS RENDERING PIPELINE
 // ═══════════════════════════════════════════════════════
 function cardClass(c){
   const isNum = !isNaN(c.value) && c.color!=='wild';
@@ -1164,9 +1163,7 @@ function renderAll(){
 function renderDiscard(){
   const top=topCard(); if(!top) return;
   const d=document.getElementById('discard');
-  const rot=(Math.random()*12-6).toFixed(1);
   d.className=cardClass(top);
-  d.style.transform=`rotate(${rot}deg)`;
   const s=sym(top.value);
   d.innerHTML=`<div class="ov"></div><span class="cv">${s}</span><span class="ct">${s}</span><span class="cb">${s}</span>`;
 }
@@ -1179,7 +1176,8 @@ function renderBots(){
   ];
   bots.forEach(({id,hEl,horiz,max})=>{
     const p=G.players?.find(x=>x.id===id);
-    if(!p) return;
+    const wrapper = document.getElementById('zone-'+id);
+    if(!p || (wrapper && wrapper.style.display === 'none')) return;
     const el=document.getElementById(hEl);
     if(!el) return;
     el.innerHTML='';
@@ -1241,7 +1239,7 @@ function renderSidebars(){
   const mob=document.getElementById('sb-mob');
   if(!list||!mob||!G.players) return;
   list.innerHTML=''; mob.innerHTML='';
-  const avatars={lucas:'🦊',mila:'🐱',sophie:'🤖',me:'👤'};
+  const avatars={lucas:'🦊',mila:'🐱',sophie:'🤖',p1:'👤',p2:'👤',p3:'👤',p4:'👤'};
   G.players.forEach((p,i)=>{
     const isT=i===G.turnIdx;
     const av=avatars[p.id]||(p.name?p.name.slice(0,2).toUpperCase():'?');
@@ -1275,8 +1273,19 @@ function renderInds(){
   } else { st.style.display='none'; }
 }
 
+function updateNovaBtn(){
+  const me=myPlayer();
+  const btn=document.getElementById('nova-btn');
+  if(!btn) return;
+  if(me&&me.hand.length===1&&!G.saidNova&&G.turnIdx===myIdx()){
+    btn.classList.add('active'); btn.disabled=false;
+  } else {
+    btn.classList.remove('active'); btn.disabled=true;
+  }
+}
+
 // ═══════════════════════════════════════════════════════
-//  LOG & TOAST
+//  DIAGNOSTICS LOGGER
 // ═══════════════════════════════════════════════════════
 function log(txt, type){
   const el=document.getElementById('game-log');
