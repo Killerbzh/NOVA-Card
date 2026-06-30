@@ -786,10 +786,10 @@ async function rematchOnline(){
 function buildOnlineState(pList){
   const deck = shuffle(buildDeck()); const pls = pList.map((p,i) => {
     const hand = []; for(let j=0;j<7;j++) hand.push(deck.shift());
-    return { id:p.id, name:p.name, hand, type:'human', color: i===0?'#166534':i===1?'#9a3412':i===2?'#831843':'#1e40af' };
+    return { id:p.id, name:p.name, hand, type:'human', color: i===0?'#166534':i===1?'#9a3412':i===2?'#831843':'#1e40af', saidNova:false };
   });
   let sc; while(true){ sc=deck.shift(); if(sc.color!=='wild') break; deck.push(sc); }
-  return { deck, discard:[sc], players:pls, turnIdx:0, direction:1, pendingDraw:0, attackType:null, saidNova:false, active:true, version:1 };
+  return { deck, discard:[sc], players:pls, turnIdx:0, direction:1, pendingDraw:0, attackType:null, saidNova:false, skipNext:false, active:true, version:1 };
 }
 
 function startFromState(state){
@@ -850,12 +850,12 @@ function startSolo(){
   G={
     deck, discard:[],
     players:[
-      {id:'lucas', name:'Lucas', hand:[], type:'bot', color:'#9a3412'},
-      {id:'me', name:myName, hand:[], type:'player', color:'#166534', isMe:true},
-      {id:'mila', name:'Mila', hand:[], type:'bot', color:'#831843'},
-      {id:'sophie', name:'Sophie', hand:[], type:'bot', color:'#1e40af'}
+      {id:'lucas', name:'Lucas', hand:[], type:'bot', color:'#9a3412', saidNova:false},
+      {id:'me', name:myName, hand:[], type:'player', color:'#166534', isMe:true, saidNova:false},
+      {id:'mila', name:'Mila', hand:[], type:'bot', color:'#831843', saidNova:false},
+      {id:'sophie', name:'Sophie', hand:[], type:'bot', color:'#1e40af', saidNova:false}
     ],
-    turnIdx:1, direction:1, pendingDraw:0, attackType:null, active:true, saidNova:false, version:1
+    turnIdx:1, direction:1, pendingDraw:0, attackType:null, active:true, saidNova:false, skipNext:false, version:1
   };
   G.players.forEach(p=>{ for(let i=0;i<7;i++) p.hand.push(drawCard(G)); });
   let sc; while(true){ sc=drawCard(G); if(sc.color!=='wild') break; G.deck.unshift(sc); }
@@ -925,13 +925,13 @@ function doPlay(player, card, playerIdx){
   applyEffect(card,playerIdx,false); advanceTurn();
 }
 
-function advanceTurn(){ G.turnIdx = nextIdx(G.turnIdx); if(onlineMode && myIdx()===G.turnIdx) hideWaitOverlay(); gameLoop(); }
+function advanceTurn(){ G.turnIdx = nextIdx(G.turnIdx); if(G.skipNext){ G.skipNext=false; G.turnIdx = nextIdx(G.turnIdx); } if(onlineMode && myIdx()===G.turnIdx) hideWaitOverlay(); gameLoop(); }
 function playMyCard(cardId){
   if(G.turnIdx!==myIdx()||!G.active) return; const me=myPlayer(); const card=me.hand.find(c=>c.id===cardId); if(!card) return; const top=topCard();
   if(!isPlayable(card,top)){ toast('Carte non jouable !','t-w'); return; }
   if(G.pendingDraw>0&&!canDefend(card)){ toast(`Contre avec une attaque ou subis la pioche !`,'t-w'); return; }
   drawnPending=null; doPlay(me,card,myIdx());
-  if(CFG.penalty&&me.hand.length===1&&!G.saidNova){
+  if(CFG.penalty&&me.hand.length===1&&!me.saidNova){
     for(let i=0;i<2;i++) me.hand.push(drawCard(G)); log('Oubli NOVA ! +2 pénalité 😅','attack'); toast('Oubli NOVA ! +2 cartes','t-w'); renderAll();
   }
   if(onlineMode) pushState();
@@ -941,10 +941,10 @@ function playerDraw(){
   if(G.turnIdx!==myIdx()||!G.active) return; const me=myPlayer();
   if(G.pendingDraw>0){
     for(let i=0;i<G.pendingDraw;i++) me.hand.push(drawCard(G));
-    log(`Tu encaisses et pioches ${G.pendingDraw} cartes.`,'me'); G.pendingDraw=0; G.attackType=null; G.saidNova=false; renderAll();
+    log(`Tu encaisses et pioches ${G.pendingDraw} cartes.`,'me'); G.pendingDraw=0; G.attackType=null; me.saidNova=false; renderAll();
     setTimeout(()=>{ advanceTurn(); if(onlineMode) pushState(); }, 500); return;
   }
-  const drawn=drawCard(G); me.hand.push(drawn); G.saidNova=false; log('Tu pioches.','me'); renderAll(); const top=topCard();
+  const drawn=drawCard(G); me.hand.push(drawn); me.saidNova=false; log('Tu pioches.','me'); renderAll(); const top=topCard();
   if(isPlayable(drawn,top)){
     if(CFG.autoDraw){ setTimeout(()=>{ doPlay(me,drawn,myIdx()); if(onlineMode) pushState(); },400); }
     else { drawnPending=drawn; renderMyHand(); toast('Jouable ! Clique dessus ou passe.','t-i'); }
@@ -952,7 +952,7 @@ function playerDraw(){
 }
 
 function callNova(){
-  const me=myPlayer(); if(me&&me.hand.length===1&&!G.saidNova&&G.turnIdx===myIdx()){ G.saidNova=true; toast('NOVA ! 🔥','t-u'); log('Tu cries NOVA !','uno'); updateNovaBtn(); }
+  const me=myPlayer(); if(me&&(me.hand.length===1||me.hand.length===2)&&!me.saidNova&&G.turnIdx===myIdx()){ me.saidNova=true; toast('NOVA ! 🔥','t-u'); log('Tu cries NOVA !','uno'); updateNovaBtn(); }
 }
 
 function openColorPicker(card,playerIdx){
@@ -969,7 +969,7 @@ function pickColor(c){ if(_cr){ _cr(c); _cr=null; } }
 function applyEffect(card, playerIdx, silent){
   if(card.value==='+2'){ G.attackType='+2'; G.pendingDraw+=2; if(!silent){ log(`+2 cumulé ! Total à piocher : ${G.pendingDraw}`,'attack'); toast('+2 ! 🔥','t-a'); } }
   else if(card.value==='+4'){ G.attackType='+4'; G.pendingDraw+=4; if(!silent){ log(`+4 cumulé ! Total à piocher : ${G.pendingDraw}`,'attack'); toast('+4 ! 😱','t-a'); } }
-  else if(card.value==='skip'){ if(!silent) log(`⊘ ${G.players[nextIdx(playerIdx)].name} passe son tour !`,'special'); G.turnIdx=nextIdx(G.turnIdx); if(!silent) toast('Tour sauté ⊘','t-i'); }
+  else if(card.value==='skip'){ if(!silent) log(`⊘ ${G.players[nextIdx(G.turnIdx)].name} passe son tour !`,'special'); G.skipNext=true; if(!silent) toast('Tour sauté ⊘','t-i'); }
   else if(card.value==='rev'){ G.direction*=-1; if(!silent){ log('↺ Inversion du sens du jeu !','special'); toast('Sens inversé ↺','t-i'); } }
 }
 
@@ -982,7 +982,7 @@ function endGame(winner){
   if(onlineMode && isMe) { const s = JSON.parse(JSON.stringify(G)); s.active=false; s.winner=winner.id; window.fbPatch(`rooms/${myRoomCode}`,{gameState:s}); }
 }
 
-function cardClass(c){ const isNum = !isNaN(c.value) && c.color!=='wild'; return `nc c-${c.color}${isNum?' is-num':''}`; }
+function cardClass(c){ const isNum = /^[0-9]+$/.test(c.value) && c.color!=='wild'; return `nc c-${c.color}${isNum?' is-num':''}`; }
 function cardEl(c, extra=''){
   const s=sym(c.value); const div=document.createElement('div'); div.className=cardClass(c)+extra; div.dataset.id=c.id;
   div.innerHTML=`<div class="ov"></div><span class="cv">${s}</span><span class="ct">${s}</span><span class="cb">${s}</span>`; return div;
@@ -1054,7 +1054,7 @@ function renderInds(){
   const st=document.getElementById('ind-stack');
   if(G.pendingDraw>0){ st.style.display='block'; document.getElementById('stack-n').textContent=G.pendingDraw; } else { st.style.display='none'; }
 }
-function updateNovaBtn(){ const me=myPlayer(); const b=document.getElementById('nova-btn'); if(b){ if(me&&me.hand.length===1&&!G.saidNova&&G.turnIdx===myIdx()){ b.classList.add('active'); b.disabled=false; } else { b.classList.remove('active'); b.disabled=true; } } }
+function updateNovaBtn(){ const me=myPlayer(); const b=document.getElementById('nova-btn'); if(b){ if(me&&(me.hand.length===1||me.hand.length===2)&&!me.saidNova&&G.turnIdx===myIdx()){ b.classList.add('active'); b.disabled=false; } else { b.classList.remove('active'); b.disabled=true; } } }
 function log(txt, type){ const el=document.getElementById('game-log'); if(!el) return; const d=document.createElement('div'); d.className='le '+(type||''); d.textContent=txt; el.appendChild(d); el.scrollTop=el.scrollHeight; }
 function toast(msg, cls){
   const w=document.getElementById('toasts'); const t=document.createElement('div'); t.className='toast '+(cls||'t-i'); t.textContent=msg; w.appendChild(t);
